@@ -5,13 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowDown, Music, Download, File, Copy } from "lucide-react";
+import { ArrowDown, Download, File, Copy } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 
 // Dummy data
 const albumsData = {
-  1: {
+  "1": {
     title: "Happy Vibes",
     mood: "Happy",
     genre: "Film",
@@ -20,6 +20,7 @@ const albumsData = {
     releaseDate: "April 3, 2025",
     cLine: "© 2025 SwaLay Digital",
     pLine: "℗ 2025 SwaLay Digital",
+    thumbnail: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop",
     tracks: [
       {
         id: 1,
@@ -36,7 +37,8 @@ const albumsData = {
         featured: "Featured Artist Name",
         lyricist: "Artist test 2 • new artist test 5 all rounder",
         composer: "test artist 3 • Golu Bantai Updated 3 • Test Composer",
-        musicProducer: "test artist 3 • new artist test 5 all rounder"
+        musicProducer: "test artist 3 • new artist test 5 all rounder",
+        thumbnail: "https://images.unsplash.com/photo-1493962853295-0fd70327578a?w=200&h=200&fit=crop"
       },
       {
         id: 2,
@@ -53,7 +55,8 @@ const albumsData = {
         featured: "Guest Vocalist",
         lyricist: "Artist test 2",
         composer: "Golu Bantai Updated 3 • Test Composer",
-        musicProducer: "test artist 3"
+        musicProducer: "test artist 3",
+        thumbnail: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=200&h=200&fit=crop"
       }
     ]
   }
@@ -109,9 +112,11 @@ const AlbumDetails = () => {
           <CardHeader>
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center">
-                  <Music className="h-10 w-10 text-white" />
-                </div>
+                <img 
+                  src={album.thumbnail} 
+                  alt={album.title}
+                  className="w-20 h-20 rounded-lg object-cover shadow-md"
+                />
                 <div>
                   <CardTitle className="text-2xl">{album.title}</CardTitle>
                   <p className="text-gray-600 mt-1">
@@ -187,9 +192,11 @@ const AlbumDetails = () => {
                 <div key={track.id} className="border rounded-lg p-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold">
-                        {index + 1}
-                      </div>
+                      <img 
+                        src={track.thumbnail} 
+                        alt={track.title}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
                       <div>
                         <h3 className="font-semibold text-lg">{track.title}</h3>
                         <div className="flex items-center gap-4 text-sm text-gray-600">
