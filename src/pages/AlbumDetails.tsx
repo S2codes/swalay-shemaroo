@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,6 +61,7 @@ const AlbumDetails = () => {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
     const [shemaroStatus, setshemaroStatus] = useState(1);
 
@@ -73,6 +74,11 @@ const AlbumDetails = () => {
   }
 
   useEffect(() => {
+    // Protect route
+    if (!localStorage.getItem("swalay_auth")) {
+      navigate("/signin");
+      return;
+    }
     const fetchData = async () => {
       setLoading(true);
       setError(null);

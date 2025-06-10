@@ -8,12 +8,14 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Auto-redirect to albums after 2 seconds for demo purposes
-    const timer = setTimeout(() => {
-      navigate("/albums");
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    // Only redirect if user is authenticated
+    const isAuthenticated = !!localStorage.getItem("swalay_auth");
+    if (isAuthenticated) {
+      const timer = setTimeout(() => {
+        navigate("/albums");
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, [navigate]);
 
 
@@ -46,7 +48,9 @@ const Index = () => {
           </Link>
         </div>
         <p className="text-sm text-gray-400 mt-4">
-          Redirecting to albums in 2 seconds...
+          {localStorage.getItem("swalay_auth")
+            ? "Redirecting to albums in 1 second..."
+            : "Please sign in to access the dashboard."}
         </p>
       </div>
     </div>

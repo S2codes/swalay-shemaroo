@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Music, Album, File } from "lucide-react";
 
@@ -9,12 +9,18 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navigation = [
     { name: "Albums", href: "/albums", icon: Album },
     { name: "Live Albums", href: "/live-albums", icon: Music },
     { name: "Rejected Albums", href: "/rejected-albums", icon: File },
   ];
+
+  const handleSignOut = () => {
+    localStorage.removeItem("swalay_auth");
+    navigate("/signin");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -55,11 +61,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/signin">
-                <Button variant="outline">
-                  Sign Out
-                </Button>
-              </Link>
+              <Button variant="outline" onClick={handleSignOut}>
+                Sign Out
+              </Button>
             </div>
           </div>
         </div>

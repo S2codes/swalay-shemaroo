@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,6 +29,7 @@ const Albums = () => {
   const [albumData, setAlbumData] = useState<Album[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const fetchAlbums = async () => {
     try {
@@ -60,6 +61,11 @@ const Albums = () => {
   };
 
   useEffect(() => {
+    // Protect route
+    if (!localStorage.getItem("swalay_auth")) {
+      navigate("/signin");
+      return;
+    }
     fetchAlbums();
   }, []);
 

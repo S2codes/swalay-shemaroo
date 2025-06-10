@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Music } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -18,24 +18,48 @@ const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      if (email && password) {
-        toast({
-          title: "Success!",
-          description: "You have been signed in successfully.",
-        });
-        navigate("/albums");
-      } else {
+    try {
+      if (!email || !password) {
         toast({
           title: "Error",
           description: "Please fill in all fields.",
           variant: "destructive",
         });
+        setIsLoading(false);
+        return;
       }
+      const response = await axios.post("http://localhost:3000/api/shemaroo/login", {
+        email,
+        password,
+      });
+
+      console.log("Login response:", response);
+
+      if (response.data.success) {
+        localStorage.setItem("swalay_auth", "true");
+        toast({
+          title: "Success!",
+          description: response.data.message || "You have been signed in successfully.",
+        });
+        navigate("/albums");
+      } else {
+        toast({
+          title: "Error",
+          description: response.data.message || "Login failed.",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || error.message || "Server error.",
+        variant: "destructive",
+      });
+      console.error("Login error:", error);
+
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
