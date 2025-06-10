@@ -45,7 +45,7 @@ export default function ChangeAlbumStatus({ albumId,  onStatusChange }: ChangeAl
     if (status === undefined) return;
     setSubmitting(true);
     try {
-      const response = await axios.post("http://localhost:3000/api/shemaroo/updatealbumstatus", {
+      const response = await axios.post("https://root.swalayplus.in/api/shemaroo/updatealbumstatus", {
         albumId,
         status,
       });

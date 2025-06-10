@@ -85,7 +85,7 @@ const AlbumDetails = () => {
       try {
         // Fetch album details
         const albumRes = await axios.get(
-          `http://localhost:3000/api/albums/getAlbumsDetails?albumId=${albumId}`
+          `https://root.swalayplus.in/api/albums/getAlbumsDetails?albumId=${albumId}`
         );
 
    
@@ -94,7 +94,7 @@ const AlbumDetails = () => {
 
         // Fetch tracks
         const tracksRes = await axios.get(
-          `http://localhost:3000/api/track/getTracks?albumId=${albumId}`
+          `https://root.swalayplus.in/api/track/getTracks?albumId=${albumId}`
         );
 
         setTracks(

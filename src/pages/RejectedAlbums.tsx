@@ -35,7 +35,7 @@ const RejectedAlbums = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`http://localhost:3000/api/shemaroo/getalbums?status=${import.meta.env.VITE_ALBUM_REJECTED}`);
+      const response = await axios.get(`https://root.swalayplus.in/api/shemaroo/getalbums?status=${import.meta.env.VITE_ALBUM_REJECTED}`);
  
       const data = response.data;
 

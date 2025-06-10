@@ -36,7 +36,7 @@ const Albums = () => {
       setLoading(true);
       setError(null);
 
-       const response = await axios.get(`http://localhost:3000/api/shemaroo/getalbums?status=${import.meta.env.VITE_ALBUM_APPROVED}`);
+       const response = await axios.get(`https://root.swalayplus.in/api/shemaroo/getalbums?status=${import.meta.env.VITE_ALBUM_APPROVED}`);
       
       // Handle different response structures
       const data = response.data;

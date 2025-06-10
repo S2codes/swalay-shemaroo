@@ -28,7 +28,7 @@ const SignIn = () => {
         setIsLoading(false);
         return;
       }
-      const response = await axios.post("http://localhost:3000/api/shemaroo/login", {
+      const response = await axios.post("https://root.swalayplus.in/api/shemaroo/login", {
         email,
         password,
       });
