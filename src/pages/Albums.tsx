@@ -168,13 +168,15 @@ const Albums = () => {
               <RefreshCw className="h-4 w-4" />
               Refresh
             </Button>
+
             <Button 
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 gap-2"
+              className="hidden bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 gap-2"
               onClick={handleExportAll}
             >
               <Download className="h-4 w-4" />
               Export All
             </Button>
+
           </div>
         </div>
 
