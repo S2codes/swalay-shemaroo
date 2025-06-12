@@ -235,7 +235,7 @@ const LiveAlbums = () => {
                           <div className="flex items-center space-x-3">
                             {album.thumbnail ? (
                               <img
-                                src={`https://swalay-test-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
+                                src={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                                 alt={album.title}
                                 className="w-12 h-12 rounded-lg object-cover"
                               />

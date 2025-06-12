@@ -188,9 +188,11 @@ const AlbumDetails = () => {
           <CardHeader>
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
+           
+
                 {album.thumbnail ? (
                   <img
-                    src={`https://swalay-test-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
+                    src={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                     alt={album.title}
                     className="w-20 h-20 rounded-lg object-cover shadow-md"
                   />
@@ -210,7 +212,7 @@ const AlbumDetails = () => {
               </div>
                 <div className="flex gap-2">
                 <a
-                  href={`https://swalay-test-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
+                  href={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -349,7 +351,7 @@ const AlbumDetails = () => {
                     <div className="flex gap-2">
 
                       <a
-                        href={`https://swalay-test-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/tracks/${track.audioFile}`}
+                        href={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/tracks/${track.audioFile}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
