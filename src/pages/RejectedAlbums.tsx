@@ -226,12 +226,12 @@ const RejectedAlbums = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <CardTitle className="flex items-center gap-2">
                 <Music className="h-5 w-5" />
-                Pending Album Collection
+                Rejected Album Collection
               </CardTitle>
               <div className="relative w-full md:w-64">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Search pending albums..."
+                  placeholder="Search rejected albums..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -319,7 +319,7 @@ const RejectedAlbums = () => {
                         <div className="flex flex-col items-center gap-2">
                           <Music className="h-8 w-8 text-gray-400" />
                           <p className="text-gray-500">
-                            {searchTerm ? 'No pending albums match your search' : 'No rejected albums found'}
+                            {searchTerm ? 'No rejected albums match your search' : 'No rejected albums found'}
                           </p>
                           {searchTerm && (
                             <Button 

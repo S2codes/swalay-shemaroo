@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowDown, Download, File, Copy, RefreshCw } from "lucide-react";
+import { ArrowDown, Download, File, Copy, RefreshCw, Play, Pause } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
@@ -64,7 +64,7 @@ const AlbumDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-    const [shemaroStatus, setshemaroStatus] = useState(1);
+  const [shemaroStatus, setshemaroStatus] = useState(1);
 
   // Decode base64 id
   let albumId = "";
@@ -113,7 +113,6 @@ const AlbumDetails = () => {
     };
     if (albumId) fetchData();
   }, [albumId]);
-
 
   const handleStatusChange = (newStatus: number) => {
     setshemaroStatus(newStatus);
@@ -383,9 +382,12 @@ const AlbumDetails = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
-
                       <a
-                        href={`${import.meta.env.VITE_AWS_S3_BASE_URL}/albums/07c1a${album._id}ba3/tracks/${track.audioFile}`}
+                        href={`${
+                          import.meta.env.VITE_AWS_S3_BASE_URL
+                        }/albums/07c1a${
+                          album._id
+                        }ba3/tracks/${track.audioFile}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -413,6 +415,22 @@ const AlbumDetails = () => {
                       </Button>
                     </div>
                   </div>
+
+                  {track.audioFile && (
+                    <div className="mt-4">
+                      <audio controls className="w-full h-10">
+                        <source
+                          src={`${
+                            import.meta.env.VITE_AWS_S3_BASE_URL
+                          }/albums/07c1a${
+                            album._id
+                          }ba3/tracks/${track.audioFile}`}
+                          type="audio/mpeg"
+                        />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                     <div>
