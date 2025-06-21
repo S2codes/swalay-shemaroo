@@ -18,6 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import fileDownload from "js-file-download";
 import ChangeAlbumStatus from "@/components/ChangeAlbumStatus";
+import { exportAlbumsWithTracksToCSV } from "@/lib/utils";
 
 interface Track {
   _id: string;
@@ -85,7 +86,7 @@ const AlbumDetails = () => {
       try {
         // Fetch album details
         const albumRes = await axios.get(
-          `https://root.swalayplus.in/api/albums/getAlbumsDetails?albumId=${albumId}`
+          `${import.meta.env.VITE_API_BASE_URL}/api/albums/getAlbumsDetails?albumId=${albumId}`
         );
 
    
@@ -94,7 +95,7 @@ const AlbumDetails = () => {
 
         // Fetch tracks
         const tracksRes = await axios.get(
-          `https://root.swalayplus.in/api/track/getTracks?albumId=${albumId}`
+          `${import.meta.env.VITE_API_BASE_URL}/api/track/getTracks?albumId=${albumId}`
         );
 
         setTracks(
@@ -142,9 +143,34 @@ const AlbumDetails = () => {
     }
   };
 
-
-
-
+  const handleExportAlbum = () => {
+    if (!album) return;
+    
+    try {
+      // Create tracks data structure for the utility function
+      const tracksData = {
+        [album._id]: tracks
+      };
+      
+      // Generate CSV using the utility function
+      const csvContent = exportAlbumsWithTracksToCSV([album], tracksData);
+      
+      // Download the file
+      fileDownload(csvContent, `${album.title.replace(/[^a-zA-Z0-9]/g, '_')}_with_tracks.csv`);
+      
+      toast({
+        title: "Export Successful!",
+        description: `Album "${album.title}" exported with ${tracks.length} tracks.`,
+      });
+    } catch (err) {
+      console.error("Error exporting album:", err);
+      toast({
+        title: "Export Failed",
+        description: "Failed to export album. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -192,7 +218,7 @@ const AlbumDetails = () => {
 
                 {album.thumbnail ? (
                   <img
-                    src={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
+                    src={`${import.meta.env.VITE_AWS_S3_BASE_URL}/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                     alt={album.title}
                     className="w-20 h-20 rounded-lg object-cover shadow-md"
                   />
@@ -212,7 +238,7 @@ const AlbumDetails = () => {
               </div>
                 <div className="flex gap-2">
                 <a
-                  href={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
+                  href={`${import.meta.env.VITE_AWS_S3_BASE_URL}/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -230,6 +256,14 @@ const AlbumDetails = () => {
                 >
                   <Copy className="h-4 w-4 mr-2" />
                   Copy Details
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={handleExportAlbum}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Export CSV
                 </Button>
 
                 {album.shemaroDeliveryStatus === 2 ? (
@@ -351,7 +385,7 @@ const AlbumDetails = () => {
                     <div className="flex gap-2">
 
                       <a
-                        href={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/tracks/${track.audioFile}`}
+                        href={`${import.meta.env.VITE_AWS_S3_BASE_URL}/albums/07c1a${album._id}ba3/tracks/${track.audioFile}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

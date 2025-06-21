@@ -9,6 +9,7 @@ import { Music, Search, Download, RefreshCw } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import axios from "axios";
 import fileDownload from "js-file-download";
+import { exportAlbumsWithTracksToCSV } from "@/lib/utils";
 
 interface Album {
   _id: string;
@@ -35,7 +36,7 @@ const RejectedAlbums = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`https://root.swalayplus.in/api/shemaroo/getalbums?status=${import.meta.env.VITE_ALBUM_REJECTED}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/shemaroo/getalbums?status=${import.meta.env.VITE_ALBUM_REJECTED}`);
  
       const data = response.data;
 
@@ -91,32 +92,78 @@ const RejectedAlbums = () => {
     }
   };
 
-  const handleExportAll = () => {
-    const headers = [
-      "Title",
-      "Artist",
-      "Tags",
-      "Genre",
-      "Language",
-      "Release Date",
-      "Tracks",
-      "UPC"
-    ];
-    const rows = albumData.filter(album => album.status !== 1).map(album => [
-      album.title,
-      album.artist,
-      (album.tags || []).join("; "),
-      album.genre || "",
-      album.language || "",
-      album.releasedate || "",
-      album.totalTracks?.toString() || "",
-      album.upc || ""
-    ]);
-    const csvContent = [
-      headers.join(","),
-      ...rows.map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(","))
-    ].join("\r\n");
-    fileDownload(csvContent, "pending_albums.csv");
+  const handleExportAll = async () => {
+    try {
+      // Show loading state
+      const exportButton = document.querySelector('[data-export-button]') as HTMLButtonElement;
+      if (exportButton) {
+        exportButton.disabled = true;
+        exportButton.innerHTML = '<RefreshCw className="h-4 w-4 animate-spin" /> Exporting...';
+      }
+
+      // Filter albums to only include rejected ones (status !== 1 and status !== 2)
+      const rejectedAlbums = albumData.filter(album => album.status !== 1 && album.status !== 2);
+
+      // Fetch tracks for each album
+      const tracksData: { [albumId: string]: any[] } = {};
+      
+      for (const album of rejectedAlbums) {
+        try {
+          const tracksRes = await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/track/getTracks?albumId=${album._id}`
+          );
+          
+          tracksData[album._id] = Array.isArray(tracksRes.data)
+            ? tracksRes.data
+            : tracksRes.data.data || [];
+        } catch (err) {
+          console.error(`Error fetching tracks for album ${album._id}:`, err);
+          tracksData[album._id] = [];
+        }
+      }
+
+      // Generate CSV using the utility function
+      const csvContent = exportAlbumsWithTracksToCSV(rejectedAlbums, tracksData);
+      
+      // Download the file
+      fileDownload(csvContent, "rejected_albums_with_tracks.csv");
+      
+    } catch (err) {
+      console.error("Error exporting albums:", err);
+      // Fallback to original export if the new one fails
+      const headers = [
+        "Title",
+        "Artist",
+        "Tags",
+        "Genre",
+        "Language",
+        "Release Date",
+        "Tracks",
+        "UPC"
+      ];
+      const rows = albumData.filter(album => album.status !== 1 && album.status !== 2).map(album => [
+        album.title,
+        album.artist,
+        (album.tags || []).join("; "),
+        album.genre || "",
+        album.language || "",
+        album.releasedate || "",
+        album.totalTracks?.toString() || "",
+        album.upc || ""
+      ]);
+      const csvContent = [
+        headers.join(","),
+        ...rows.map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(","))
+      ].join("\r\n");
+      fileDownload(csvContent, "rejected_albums.csv");
+    } finally {
+      // Reset button state
+      const exportButton = document.querySelector('[data-export-button]') as HTMLButtonElement;
+      if (exportButton) {
+        exportButton.disabled = false;
+        exportButton.innerHTML = '<Download className="h-4 w-4" /> Export All';
+      }
+    }
   };
 
   if (loading) {
@@ -167,6 +214,7 @@ const RejectedAlbums = () => {
             <Button 
               className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 gap-2"
               onClick={handleExportAll}
+              data-export-button
             >
               <Download className="h-4 w-4" />
               Export All
@@ -214,7 +262,7 @@ const RejectedAlbums = () => {
                           <div className="flex items-center space-x-3">
                             {album.thumbnail ? (
                               <img 
-                                src={`https://swalay-music-files.s3.ap-south-1.amazonaws.com/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`} 
+                                src={`${import.meta.env.VITE_AWS_S3_BASE_URL}/albums/07c1a${album._id}ba3/cover/${album.thumbnail}`} 
                                 alt={album.title}
                                 className="w-12 h-12 rounded-lg object-cover"
                               />

@@ -31,6 +31,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div className="flex items-center gap-4">
               <Link to="/albums" className="flex items-center gap-2">
               <img src="https://swalay-music-files.s3.ap-south-1.amazonaws.com/assets/SwaLay-logo.png" alt="swalay" width={100} />
+              
               </Link>
               <nav className="hidden md:flex space-x-4 ml-8">
                 {navigation.map((item) => {

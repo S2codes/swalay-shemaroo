@@ -28,7 +28,7 @@ const SignIn = () => {
         setIsLoading(false);
         return;
       }
-      const response = await axios.post("https://root.swalayplus.in/api/shemaroo/login", {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/shemaroo/login`, {
         email,
         password,
       });
